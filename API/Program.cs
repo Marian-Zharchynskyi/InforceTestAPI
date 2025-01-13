@@ -1,3 +1,6 @@
+using API.Modules;
+using Infrastructure;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -13,6 +16,9 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.SetupServices();
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
@@ -23,5 +29,7 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+await app.InitialiseDb();
 
 app.Run();
