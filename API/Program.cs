@@ -25,7 +25,7 @@ app.UseHttpsRedirection();
 app.UseRouting();
 
 app.UseCors(options => options
-    .WithOrigins(new[] { "http://localhost:5173" })
+    .WithOrigins(new[] { "http://localhost:5205" })
     .AllowAnyMethod()
     .AllowAnyHeader()
     .AllowCredentials()

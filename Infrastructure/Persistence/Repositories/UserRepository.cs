@@ -2,6 +2,7 @@ using Application.Common.Interfaces.Queries;
 using Application.Common.Interfaces.Repositories;
 using Domain.Authentications.Users;
 using Microsoft.EntityFrameworkCore;
+using Optional;
 
 namespace Infrastructure.Persistence.Repositories;
 
@@ -28,12 +29,13 @@ public class UserRepository : IUserRepository, IUserQueries
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<User?> GetById(UserId id, CancellationToken cancellationToken)
+    public async Task<Option<User>> GetById(UserId id, CancellationToken cancellationToken)
     {
-        return await _context.Users
+        var entity =  await _context.Users
             .Include(x => x.Roles)
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        return entity == null ? Option.None<User>() : Option.Some(entity);
     }
 
     public async Task<User> Add(User user, CancellationToken cancellationToken)

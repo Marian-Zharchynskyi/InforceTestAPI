@@ -1,6 +1,7 @@
 using Application.Common.Interfaces.Queries;
 using Domain.Authentications.Roles;
 using Microsoft.EntityFrameworkCore;
+using Optional;
 
 namespace Infrastructure.Persistence.Repositories;
 
@@ -20,17 +21,19 @@ public class RoleRepository : IRoleQueries
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<Role?> GetById(Guid id, CancellationToken cancellationToken)
+    public async Task<Option<Role>> GetById(Guid id, CancellationToken cancellationToken)
     {
-        return await _context.Roles
+        var entity = await _context.Roles
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        return entity == null ? Option.None<Role>() : Option.Some(entity);
     }
 
-    public async Task<Role?> GetByName(string name, CancellationToken cancellationToken)
+    public async Task<Option<Role>> GetByName(string name, CancellationToken cancellationToken)
     {
-        return await _context.Roles
+        var entity = await _context.Roles
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Name == name, cancellationToken);
+        return entity == null ? Option.None<Role>() : Option.Some(entity);
     }
 }

@@ -1,10 +1,11 @@
 using Domain.Authentications.Roles;
+using Optional;
 
 namespace Application.Common.Interfaces.Queries;
 
 public interface IRoleQueries
 {
     Task<IReadOnlyList<Role>> GetAll(CancellationToken cancellationToken);
-    Task<Role?> GetById(Guid id, CancellationToken cancellationToken);
-    Task<Role?> GetByName(string name, CancellationToken cancellationToken);
+    Task<Option<Role>> GetById(Guid id, CancellationToken cancellationToken);
+    Task<Option<Role>> GetByName(string name, CancellationToken cancellationToken);
 }

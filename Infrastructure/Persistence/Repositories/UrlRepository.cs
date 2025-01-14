@@ -2,6 +2,7 @@ using Application.Common.Interfaces.Queries;
 using Application.Common.Interfaces.Repositories;
 using Domain.Urls;
 using Microsoft.EntityFrameworkCore;
+using Optional;
 
 namespace Infrastructure.Persistence.Repositories;
 
@@ -21,18 +22,22 @@ public class UrlRepository : IUrlRepository, IUrlQueries
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<Url?> GetById(UrlId id, CancellationToken cancellationToken)
+    public async Task<Option<Url>> GetById(UrlId id, CancellationToken cancellationToken)
     {
-        return await _context.Urls
+        var entity = await _context.Urls
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        
+        return entity == null ? Option.None<Url>() : Option.Some(entity);
     }
 
-    public async Task<Url?> GetByShortenedUrl(string shortenedUrl, CancellationToken cancellationToken)
+    public async Task<Option<Url>> GetByUrl(string url, CancellationToken cancellationToken)
     {
-        return await _context.Urls
+        var entity = await _context.Urls
             .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.ShortenedUrl == shortenedUrl, cancellationToken);
+            .FirstOrDefaultAsync(x => x.OriginalUrl == url, cancellationToken);
+        
+        return entity == null ? Option.None<Url>() : Option.Some(entity);
     }
 
     public async Task<Url> Add(Url url, CancellationToken cancellationToken)
