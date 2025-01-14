@@ -1,4 +1,5 @@
 using System.Reflection;
+using Application.Services.HashPasswordService;
 using Domain.Authentications.Roles;
 using Domain.Authentications.Users;
 using Domain.Urls;
@@ -6,7 +7,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Persistence;
 
-public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
+public class ApplicationDbContext(
+    DbContextOptions<ApplicationDbContext> options,
+    IHashPasswordService hashPasswordService) : DbContext(options)
 {
     public DbSet<User> Users { get; set; }
     public DbSet<Role> Roles { get; set; }
@@ -16,7 +19,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     {
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         base.OnModelCreating(builder);
-        
-        DataSeed.Seed(builder);
+
+        DataSeed.Seed(builder, hashPasswordService);
     }
 }

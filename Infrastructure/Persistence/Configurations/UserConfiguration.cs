@@ -24,8 +24,8 @@ namespace Infrastructure.Persistence.Configurations
                 .IsRequired();
 
             builder.HasMany(x => x.Roles)
-                .WithMany()
-                .UsingEntity(j => j.ToTable("UserRoles"));
+                .WithMany(x => x.Users)
+                .UsingEntity(j => j.ToTable("user_roles"));
         }
     }
 }

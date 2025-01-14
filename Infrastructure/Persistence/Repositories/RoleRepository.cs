@@ -26,6 +26,7 @@ public class RoleRepository : IRoleQueries
         var entity = await _context.Roles
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        
         return entity == null ? Option.None<Role>() : Option.Some(entity);
     }
 
@@ -34,6 +35,7 @@ public class RoleRepository : IRoleQueries
         var entity = await _context.Roles
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Name == name, cancellationToken);
+        
         return entity == null ? Option.None<Role>() : Option.Some(entity);
     }
 }

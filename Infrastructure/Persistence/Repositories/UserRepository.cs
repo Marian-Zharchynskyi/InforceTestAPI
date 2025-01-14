@@ -15,11 +15,13 @@ public class UserRepository : IUserRepository, IUserQueries
         _context = context;
     }
 
-    public async Task<User?> GetByEmail(string email, CancellationToken cancellationToken)
+    public async Task<Option<User>> GetByEmail(string email, CancellationToken cancellationToken)
     {
-        return await _context.Users
+        var entity = await _context.Users
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Email == email, cancellationToken);
+        
+        return entity == null ? Option.None<User>() : Option.Some(entity);
     }
 
     public async Task<IReadOnlyList<User>> GetAll(CancellationToken cancellationToken)
@@ -31,10 +33,11 @@ public class UserRepository : IUserRepository, IUserQueries
 
     public async Task<Option<User>> GetById(UserId id, CancellationToken cancellationToken)
     {
-        var entity =  await _context.Users
+        var entity = await _context.Users
             .Include(x => x.Roles)
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        
         return entity == null ? Option.None<User>() : Option.Some(entity);
     }
 
@@ -60,5 +63,15 @@ public class UserRepository : IUserRepository, IUserQueries
         await _context.SaveChangesAsync(cancellationToken);
 
         return user;
+    }
+    
+    public async Task<User> AddRole(UserId userId, string idRole, CancellationToken cancellationToken)
+    {
+        var entity = await _context.Users.FirstOrDefaultAsync(x => x.Id == userId, cancellationToken);
+
+        var role = await _context.Roles.FirstOrDefaultAsync(x => x.Id.ToString() == idRole, cancellationToken);
+        entity.Roles.Add(role);
+        await _context.SaveChangesAsync(cancellationToken);
+        return entity;
     }
 }
