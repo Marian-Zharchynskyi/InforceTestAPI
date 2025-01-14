@@ -1,4 +1,4 @@
-using Domain.Users;
+using Domain.Authentications.Users;
 
 namespace Application.Common.Interfaces.Repositories;
 

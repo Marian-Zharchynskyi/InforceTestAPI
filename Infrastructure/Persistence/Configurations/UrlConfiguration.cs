@@ -1,6 +1,6 @@
 
+using Domain.Authentications.Users;
 using Domain.Urls;
-using Domain.Users;
 using Infrastructure.Persistence.Converters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

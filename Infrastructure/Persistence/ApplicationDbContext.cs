@@ -1,7 +1,7 @@
 using System.Reflection;
-using Domain.Roles;
+using Domain.Authentications.Roles;
+using Domain.Authentications.Users;
 using Domain.Urls;
-using Domain.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Persistence;
@@ -16,5 +16,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     {
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         base.OnModelCreating(builder);
+        
+        DataSeed.Seed(builder);
     }
 }

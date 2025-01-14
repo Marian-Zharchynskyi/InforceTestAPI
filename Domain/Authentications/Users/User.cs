@@ -1,6 +1,6 @@
-using Domain.Roles;
+using Domain.Authentications.Roles;
 
-namespace Domain.Users;
+namespace Domain.Authentications.Users;
 
 public class User
 {

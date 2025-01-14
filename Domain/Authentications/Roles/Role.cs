@@ -1,4 +1,4 @@
-namespace Domain.Roles;
+namespace Domain.Authentications.Roles;
 
 public class Role
 {
